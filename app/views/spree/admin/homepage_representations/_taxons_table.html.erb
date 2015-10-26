@@ -1,0 +1,25 @@
+<table class="table">
+  <thead>
+  <tr data-hook="images_header">
+    <th><%= Spree.t(:name) %></th>
+    <th><%= Spree.t(:description) %></th>
+    <th><%= Spree.t(:permalink) %></th>
+    <th class="actions"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% child_taxons.each do |taxon| %>
+      <tr id="<%= spree_dom_id taxon %>" data-hook="images_row">
+        <td><%= taxon.name %></td>
+        <td><%= taxon.description %></td>
+        <td><%= taxon.permalink %></td>
+        <td class="actions actions-2">
+          <%= button_link_to "Edit Taxon", edit_admin_taxonomy_taxon_path(taxon.taxonomy.id, taxon.id), :icon => 'edit', :class => "btn btn-success" %>
+        </td>
+
+      </tr>
+  <% end %>
+  </tbody>
+
+</table>

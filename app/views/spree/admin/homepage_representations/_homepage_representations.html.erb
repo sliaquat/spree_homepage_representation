@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="dropdown">
+    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      Add New Item
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <li><%= link_to "Taxon Item", taxons_new_admin_homepage_representation_url %></li>
+      <% if @reviews.count > 0 %>
+          <li><%= link_to "Reviews Item", reviews_new_admin_homepage_representation_url %></li>
+      <% end %>
+      <li><%= link_to "Taxon Image Item", taxon_image_new_admin_homepage_representation_url %></li>
+      <li><%= link_to "Taxon Products Item", taxon_products_new_admin_homepage_representation_url %></li>
+    </ul>
+  </div>
+</div>
+
+
+<table class="table sortable" id="listing_homepage_representations" data-hook data-sortable-link="<%= update_positions_admin_homepage_representations_url %>">
+  <thead>
+  <tr data-hook="admin_homepage_representations_index_headers">
+    <th><%= "Re-Position" %></th>
+    <th><%= Spree.t(:name) %></th>
+    <th><%= Spree.t(:type) %></th>
+    <th data-hook="admin_homepage_representations_index_header_actions" class="actions"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @homepage_representations.each do |representation| %>
+      <tr id="<%= spree_dom_id representation %>" data-hook="admin_homepage_representations_index_rows">
+        <td class="move-handle">
+          <% if can? :edit, representation %>
+              <span class="icon icon-move handle"></span>
+          <% end %>
+        </td>
+        <td class="align-center"><%= link_to representation.name, edit_object_url(representation) %></td>
+        <td class="align-center"><%= human_representable_type(representation.representable_type) %> <%= representation_sub_type(representation) %></td>
+        <td data-hook="admin_homepage_representations_index_row_actions" class="actions">
+          <%= link_to_edit representation, :no_text => true, :class => 'edit' %>
+          &nbsp;
+          <%= link_to_delete representation, :no_text => true %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

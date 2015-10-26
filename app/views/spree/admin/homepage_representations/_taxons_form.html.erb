@@ -1,0 +1,203 @@
+<div class="row">
+
+  <div class="col-md-2">
+    <%= f.field_container :name do %>
+        <%= f.label :name, t(:name) %>
+        <br>
+        <%= f.text_field :name, :class => 'fullwidth', class: "form-control", required: true %>
+    <% end %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.field_container :description do %>
+        <%= f.label :description, t(:description) %>
+        <br>
+        <%= f.text_field :description, :class => 'fullwidth', class: "form-control" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-2" id="no_of_carousel_items">
+    <%= f.field_container :no_of_carousel_items do %>
+        <%= f.label :no_of_carousel_items, t(:no_of_carousel_items) %>
+        <br>
+        <%= f.number_field :no_of_carousel_items, :class => 'fullwidth form-control', step: "1", min: "1", max: "#{[8,@child_taxons.count].min}" %>
+    <% end %>
+  </div>
+
+
+  <div class="col-md-2">
+    <%= f.field_container :parent_taxon do %>
+        <%= f.label :parent_taxon, t(:parent_taxon) %>
+        <br>
+        <%= select("homepage_representation", "representable_id", @top_level_taxons.collect { |p| [p.name, p.id] }, {}, :class => 'select2') %>
+
+    <% end %>
+  </div>
+
+  <div class="col-md-2">
+    <%= f.field_container :parent_taxon do %>
+        <%= f.label :background_type, t(:background_type) %>
+        <br>
+        <%= select("temp", "background_type", ["Color", "Image"].collect { |p| [p, p] }, {}, :class => 'select2') %>
+    <% end %>
+  </div>
+
+</div>
+
+
+<br>
+<br>
+
+<div class="row">
+
+  <div class="col-md-2">
+    <div class="field checkbox">
+      <label>
+        <%= f.check_box :dark, class: "form-control" %>
+        <%= t(:dark) %>
+      </label>
+    </div>
+  </div>
+
+
+  <% if !@taxon_homepage_representation.background_image.blank? %>
+      <div class="col-md-2" id="background_image_thumbnail">
+        <%= f.field_container :thumbnail, class: ['form-group'] do %>
+            <%= f.label :thumbnail, Spree.t(:thumbnail) %>
+            <%= link_to image_tag(@taxon_homepage_representation.background_image.url(:small)), @taxon_homepage_representation.background_image.url(:original) %>
+        <% end %>
+      </div>
+  <% end %>
+
+  <div class="col-md-2" id="background_image">
+    <%= f.field_container :background_image, class: ['form-group'] do %>
+        <%= f.label :background_image, "File name: (Preferrred Size: 2000x1333)" %>
+        <%= f.file_field :background_image %>
+    <% end %>
+  </div>
+
+  <div class="col-md-2" id="background_offset">
+    <%= f.field_container :background_stellar_offset do %>
+        <%= f.label :background_stellar_offset, t(:background_offset) %>
+        <br>
+        <%= f.number_field :background_stellar_offset, :class => 'fullwidth form-control',step:"1", min:"0", max:"1500" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-2"  id="background_ratio">
+    <%= f.field_container :background_stellar_ratio do %>
+        <%= f.label :background_stellar_ratio, t(:background_stellar_ratio) %>
+        <br>
+        <%= f.number_field :background_stellar_ratio, :class => 'fullwidth form-control', step:"0.1", min:"0.0", max:"1.0"%>
+    <% end %>
+  </div>
+
+  <div class="col-md-2" id="background_color">
+    <%= f.field_container :background_color, class: ['form-group'] do %>
+        <%= f.label :background_color, Spree.t(:background_color) %>
+        <%= f.color_field :background_color %>
+    <% end %>
+  </div>
+
+
+  <%= f.hidden_field :representable_type, :value => @top_level_taxons.first.class.name %>
+
+</div>
+
+<h3>Taxons under the selected parent taxon: </h3>
+<div class="row" id="table-row">
+
+  <%= render partial: 'taxons_table', locals: {child_taxons: @child_taxons} if @child_taxons.count > 0 %>
+
+</div>
+
+
+<script>
+    <%if @taxon_homepage_representation.new_record?%>
+    var url = "/admin/homepage_representations/new/taxons"
+    <%else%>
+    var url = "/admin/homepage_representations/" + <%=@taxon_homepage_representation.id%> +"/edit"
+    <%end%>
+
+    $(document).ready(function () {
+
+        var showImage = function (setDropDownValue) {
+            if (setDropDownValue == true) {
+                console.log ("Setting background type to Image")
+//                $("#temp_background_type").val("Image");
+                $("#temp_background_type").select2().select2('val','Image');
+
+
+            }
+            $('#background_image').removeAttr('hidden');
+            $('#background_offset').removeAttr('hidden');
+            $('#background_ratio').removeAttr('hidden');
+            $('#background_image_thumbnail').removeAttr('hidden');
+            $('#background_color').attr('hidden', 'hidden');
+        }
+
+        var showColor = function (setDropDownValue) {
+            if (setDropDownValue == true) {
+                console.log ("Setting background type to Color")
+
+                $("#temp_background_type").val("Color");
+//                $('#inputID').select2('data', {id: 100, a_key: 'Lorem Ipsum'});
+                $("#temp_background_type").select2().select2('val','Color');
+
+            }
+            $('#background_image').attr('hidden', 'hidden');
+            $('#background_offset').attr('hidden', 'hidden');
+            $('#background_ratio').attr('hidden', 'hidden');
+
+            $('#background_image_thumbnail').attr('hidden', 'hidden');
+            $('#background_color').removeAttr('hidden');
+        }
+
+        var on_parent_taxon_change = function () {
+            console.log("selected parent taxon id: " + $('#homepage_representation_representable_id option:selected').val())
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: 'script',
+                data: {homepage_representation_representable_id: $('#homepage_representation_representable_id option:selected').val()},
+                success: function () {
+
+                }
+            });
+        }
+
+        $('#homepage_representation_representable_id').change(on_parent_taxon_change);
+
+
+        $('#temp_background_type').change(function () {
+
+            console.log($(this).val())
+            if ($(this).val() == 'Color') { //Color
+                showColor(false)
+            }
+            else { //Image
+                showImage(false)
+            }
+
+
+        });
+
+        <%if @taxon_homepage_representation.new_record?%>
+        if ($('#temp_background_type').val() == 'Color') { //Color
+            showColor(false)
+        }
+        else { //Image
+            showImage(false)
+        }
+        <%elsif !@taxon_homepage_representation.background_color.blank?%>
+        showColor(true)
+        <%else%>
+        showImage(true)
+        <%end%>
+
+
+    });
+
+
+</script>
+

@@ -1,0 +1,35 @@
+<table class="table">
+  <thead>
+  <tr data-hook="images_header">
+    <th ><%= Spree.t(:thumbnail) %></th>
+    <th><%= Spree.t(:name) %></th>
+    <th><%= Spree.t(:super_text) %></th>
+    <th><%= Spree.t(:body) %></th>
+    <th><%= Spree.t(:product_name) %></th>
+    <th><%= Spree.t(:button_name) %></th>
+    <th><%= Spree.t(:dark) %></th>
+    <th><%= Spree.t(:published) %></th>
+    <th class="actions"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+      <tr id="<%= spree_dom_id taxon_image %>" data-hook="images_row">
+        <td class="image">
+          <%= link_to image_tag(taxon_image.attachment.url(:mini), class: 'thumbnail'), taxon_image.attachment.url(:original) %>
+        </td>
+        <td><%= taxon_image.taxon_image_name %></td>
+        <td><%= taxon_image.super_text %></td>
+        <td><%= taxon_image.alt %></td>
+        <td><%= taxon_image.product.name if taxon_image.product %></td>
+        <td><%= taxon_image.button_name %></td>
+        <td><%= taxon_image.dark ? Spree.t(:say_yes) : Spree.t(:say_no) %></td>
+        <td><%= taxon_image.published ? Spree.t(:say_yes) : Spree.t(:say_no) %></td>
+        <td class="actions actions-2">
+          <%= button_link_to "Edit Taxon Image", edit_admin_taxon_taxon_image_url(taxon_image.taxon.id, taxon_image), :icon => 'edit', :class => "btn btn-success" %>
+        </td>
+
+      </tr>
+  </tbody>
+
+</table>

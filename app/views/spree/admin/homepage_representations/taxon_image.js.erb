@@ -1,0 +1,7 @@
+$("#homepage_representation_representable_id").effect("highlight");
+$("#homepage_representation_representable_id").replaceWith("<%= escape_javascript(select('homepage_representation', 'representable_id', @taxon_images.collect { |p| [p.alt, p.id] })) %>")
+$("#table-row").html("<%= escape_javascript(render partial: 'taxon_image_table', locals: {taxon_image: @selected_taxon_image}) %>")
+console.log("setting homepage_representation_representable_id to:" + '<%=@selected_taxon_image.id%>')
+$("#homepage_representation_representable_id").val("<%=@selected_taxon_image.id%>");
+$("#homepage_representation_name").val("<%=@selected_taxon_image.name%>");
+

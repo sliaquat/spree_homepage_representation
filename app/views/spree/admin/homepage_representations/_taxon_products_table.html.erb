@@ -1,0 +1,27 @@
+<table class="table">
+  <thead>
+  <tr data-hook="images_header">
+    <th ><%= Spree.t(:thumbnail) %></th>
+    <th><%= Spree.t(:name) %></th>
+    <th><%= Spree.t(:description) %></th>
+    <th class="actions"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% products.each do |product| %>
+      <tr id="<%= spree_dom_id product %>" data-hook="images_row">
+        <td class="image">
+          <%= link_to image_tag(product.images.first.attachment.url(:mini), class: 'thumbnail'), product.images.first.attachment.url(:original) %>
+        </td>
+        <td><%= product.name %></td>
+        <td><%= product.description %></td>
+        <td class="actions actions-2">
+          <%= button_link_to "Edit Product", edit_product_path(product), :icon => 'edit', :class => "btn btn-success" %>
+        </td>
+
+      </tr>
+  <% end %>
+  </tbody>
+
+</table>

@@ -1,0 +1,3 @@
+$("#homepage_representation_representable_id").effect("highlight");
+$("#table-row").html("<%= escape_javascript(render partial: 'taxons_table', locals: {child_taxons: @child_taxons}) if @child_taxons.count > 0 %>")
+$("#homepage_representation_no_of_carousel_items").prop("max", <%="#{[8,@child_taxons.count].min}"%>)

@@ -1,0 +1,22 @@
+<% content_for :page_title do %>
+    Edit Taxon Representation
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= button_link_to 'Back to Homepage Representations', spree.admin_homepage_representations_path, :icon => 'arrow-left' %>
+<% end %>
+
+<%= form_for [:admin, @taxon_homepage_representation], html: {multipart: true} do |f| %>
+
+    <%= render :partial => 'taxons_form', :locals => { :f => f } %>
+
+    <div class="clear"></div>
+
+    <div class="form-actions" data-hook="buttons">
+      <%= button Spree.t('actions.update'), 'ok', 'submit', {class: 'btn-success'} %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), admin_homepage_representations_path, :icon => 'remove' %>
+    </div>
+
+<% end %>
+
