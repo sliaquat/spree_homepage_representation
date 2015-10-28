@@ -1,4 +1,5 @@
 class Spree::HomepageRepresentation < ActiveRecord::Base
+
   acts_as_list
   default_scope { order("#{self.table_name}.position") }
   has_attached_file :background_image,

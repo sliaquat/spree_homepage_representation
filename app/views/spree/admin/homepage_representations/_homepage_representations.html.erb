@@ -5,12 +5,13 @@
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      <li><%= link_to "Taxon Item", taxons_new_admin_homepage_representation_url %></li>
-      <% if @reviews.count > 0 %>
-          <li><%= link_to "Reviews Item", reviews_new_admin_homepage_representation_url %></li>
+
+      <% Spree::HomepageRepresentationSettings.new[:allowed_items].each do |item| %>
+
+          <li><%= link_to "#{human_representable_type(item.to_s)} Item", send(item.to_s + "_new_admin_homepage_representation_url") %></li>
       <% end %>
-      <li><%= link_to "Taxon Image Item", taxon_image_new_admin_homepage_representation_url %></li>
-      <li><%= link_to "Taxon Products Item", taxon_products_new_admin_homepage_representation_url %></li>
+
+
     </ul>
   </div>
 </div>
