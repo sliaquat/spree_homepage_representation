@@ -1,0 +1,20 @@
+<% Spree::HomepageRepresentation.all.order('position ASC').each_with_index do |representation, i| %>
+
+    <% if representation.representable_type.constantize == Spree::TaxonImage && Spree::HomepageRepresentationSettings.new[:allowed_items].include?(:taxon_image) %>
+        <%= render :partial => 'spree/homepage_representations/taxon_image_representation', :locals => {:taxon_image => Spree::TaxonImage.find_by(id: representation.representable_id), :background_stellar_ratio => representation.background_stellar_ratio, :background_stellar_offset => representation.background_stellar_offset} %>
+    <% elsif representation.representable_type.constantize == Spree::Taxon %>
+        <% taxon = Spree::Taxon.find_by(id: representation.representable_id) %>
+
+        <% if taxon.children.count > 0 && Spree::HomepageRepresentationSettings.new[:allowed_items].include?(:taxons) %>
+            <%= render :partial => 'spree/homepage_representations/taxons_representation', :locals => {:representation => representation, :index => i} %>
+
+        <% elsif taxon.products.count > 0 && Spree::HomepageRepresentationSettings.new[:allowed_items].include?(:taxon_products) %>
+            <%= render :partial => 'spree/homepage_representations/taxon_products_representation', :locals => {:representation => representation, :index => i} %>
+        <% end %>
+
+    <% elsif representation.representable_type.constantize == Spree::Review && Spree::HomepageRepresentationSettings.new[:allowed_items].include?(:reviews) %>
+        <%= render :partial => 'spree/homepage_representations/reviews_representation', :locals => {:representation => representation, :index => i} %>
+    <% end %>
+
+
+<% end %>
