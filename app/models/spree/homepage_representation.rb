@@ -13,5 +13,4 @@ class Spree::HomepageRepresentation < ActiveRecord::Base
 
   validates :background_stellar_ratio, inclusion: { in: 0..1 }
   validates :background_stellar_offset, inclusion: { in: 0..1500 }
-  validates :no_of_carousel_items, inclusion: { in: 1..8 }
 end
